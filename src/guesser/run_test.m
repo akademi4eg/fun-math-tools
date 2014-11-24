@@ -11,7 +11,7 @@ if nargin < 2
 end
 data = get_all_data();
 % use up to 5 steps of memory
-max_ord = 7;
+max_ord = 8;
 models = cell(max_ord, 1);
 for ord = 1:max_ord
     all_Z = [];
@@ -21,14 +21,14 @@ for ord = 1:max_ord
         p = randi(100, [2, 2^ord]);
     else
         % try to get estimate of distribution using half of data
-        p = ones(2, 2^ord);
-        for i = 1:ceil(length(data)/2)
+        p = [];
+        for i = 1:2:length(data)
             p = get_predictors(data{i}, ord, p);
         end
     end
     models{ord} = p;
-    % run test on second half of data
-    for j = 1+ceil(length(data)/2):length(data)
+    % run test on another half of data
+    for j = 2:2:length(data)
         Z = data{j}(ord+1:end);
         Z2 = Z;
         for i = 1:length(Z)
@@ -42,16 +42,9 @@ for ord = 1:max_ord
         % randomize outputs given probabilities
         out = rand(size(all_Z2))<all_Z2;
     else
-        % estimate optimal threshold
-        [a, b, t] = roc(all_Z, all_Z2);
-        [~, t_ind] = min(a.^2+(1-b).^2);
-        t = t(t_ind);
-        out = (all_Z2>=t);
+        out = (all_Z2>=0.5);
     end
     errs = sum(all_Z~=out);
-    if errs > length(all_Z)/2
-        errs = sum(all_Z~=(1-out));
-    end
     % display stats
     fprintf('%d-step memory: %d/%d errors (%1.2f%%)', ord, errs, length(all_Z),...
             100*errs/length(all_Z));

@@ -3,7 +3,7 @@ function p = get_predictors(data, ord, p)
 %   Estimates distribution from data.
 
 % initialization to have 50% probability as a default case
-if nargin < 3
+if nargin < 3 || isempty(p)
     p = ones(2, 2^ord);
 end
 for i = 1:length(data)-ord
