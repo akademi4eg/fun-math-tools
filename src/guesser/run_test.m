@@ -48,6 +48,6 @@ for ord = 1:max_ord
     % display stats
     fprintf('%d-step memory: %d/%d errors (%1.2f%%)', ord, errs, length(all_Z),...
             100*errs/length(all_Z));
-    fprintf(', CI: %1.2f%%', 100*1.96*sqrt(std(all_Z)/length(all_Z)));
+    fprintf(', CI: %1.2f%%', 100*1.96*sqrt(std(all_Z~=out)/length(all_Z)));
     fprintf(', chance at least %1.2f%%\n', 100/2^(ord+1));
 end
