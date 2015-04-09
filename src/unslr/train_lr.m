@@ -1,13 +1,17 @@
-function W = train_lr(data, t)
+function [W, dist] = train_lr(data, t, max_iter, W)
 
-max_iter = 20;
 min_diff = 0.01;
-alpha = 0.1;
+alpha = 0.01;
 
-W = init_weights(data);
+if nargin < 3
+    max_iter = 20;
+end
+if nargin < 4
+    W = init_weights(data);
+end
 
 i = 1;
-old_ll = Inf;
+old_ll = -Inf;
 p = get_probs(W, data);
 ll = get_logll(p, t);
 fprintf('Iteration #%d\n', 0);
@@ -22,7 +26,7 @@ while i < max_iter
     ll = get_logll(p, t);
     
     fprintf('--log-likelihood: %2.3f, errors: %2.2f%%\n', ll, 100*dist);
-    if old_ll-ll < min_diff
+    if ll-old_ll < min_diff
         break;
     end
     old_ll = ll;
