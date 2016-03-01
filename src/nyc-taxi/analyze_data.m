@@ -62,7 +62,7 @@ title('Spatial distribution for p-values of hypothesis\newlinethat mean(location
 figure;
 pop_mean = 20;
 % p-value for mean(percent-tip)=20 t-test
-perc_pval_func = @(x)1-tcdf((mean(x)-pop_mean)/pop_std*sqrt(length(x)), length(x)-1);
+perc_pval_func = @(x)1-tcdf((mean(x)-pop_mean)/std(x)*sqrt(length(x)), length(x)-1);
 plot_coord_diagram(data, 'perc_tip', cell_size, cell_size, perc_pval_func, nan_mask, 50);
 title('Spatial distribution for p-values of hypothesis\newlinethat mean(location percent-tip) = 20%');
 
